@@ -77,6 +77,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{ou
 #contacts{background:var(--pcb2);color:var(--silk)}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px;margin-top:20px}
 .cgrid span{display:block;opacity:.7;font-size:14px}.cgrid b{font-size:18px}
+.notice{background:var(--cu);color:#1a0f05;font-size:15px;font-weight:500}.notice .wrap{padding:10px max(5vw,16px)}
 footer{padding:20px max(5vw,16px);font-size:14px;color:var(--mute)}
 .bar{position:fixed;left:50%;bottom:16px;transform:translate(-50%,140%);transition:transform .25s;background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 8px 8px 18px;display:flex;gap:14px;align-items:center;z-index:9;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
 .bar.show{transform:translate(-50%,0)}
@@ -101,6 +102,7 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 <nav><a href="#catalog">Каталог</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
 </div></header>
 
+<div class="notice" role="note"><div class="wrap">Сайт щойно почав роботу. Облік усіх запчастин завершимо протягом місяця, тож частини позицій тут може ще не бути. Якщо потрібної плати не знайшли — напишіть нам, і вибачте за незручності.</div></div>
 <section class="hero band" id="top"><div class="wrap">
 <div class="txt">
 <h1>Плати й двигуни для пральних, сушильних і посудомийних машин</h1>
