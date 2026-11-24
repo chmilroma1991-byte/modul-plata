@@ -198,7 +198,8 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 {
 const PHONE='066 377 53 46';
 const D=__DATA__;
-const CAT={wash:'Пральні',dry:'Сушильні',dish:'Посудомийні',motor:'Двигуни'};
+const CAT={wash:'Модулі для пральних машин',dry:'Модулі для сушильних машин',dish:'Модулі для посудомийних машин',motor:'Двигуни для пральних машин'};
+const FOR={wash:'Модуль для пральної машини',dry:'Модуль для сушильної машини',dish:'Модуль для посудомийної машини',motor:'Двигун для пральної машини'};
 const items=D.map((r,i)=>({id:i,cat:r[0],brand:r[1],kind:r[2],code:r[3],model:r[4],qty:r[5],note:r[6],fits:r[7],ph:r[8]||'',pr:r[9]||0,kit:r[10]||''}));
 const fmt=n=>n.toLocaleString('uk-UA').replace(/\s/g,'\u00a0');
 items.sort((a,b)=>(b.ph?1:0)-(a.ph?1:0));items.forEach((it,i)=>it.id=i);
@@ -215,15 +216,15 @@ $('phone').textContent=PHONE||'Номер з’явиться найближчи
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function tabs(){
   const n=c=>items.filter(i=>c==='all'||i.cat===c).length;
-  $('tabs').innerHTML=['all','wash','dry','dish','motor'].map(c=>`<button class="tab" data-c="${c}" aria-pressed="${c===cat}">${c==='all'?'Усі':CAT[c]}<small>${n(c)}</small></button>`).join('');
+  $('tabs').innerHTML=['all','wash','dry','dish','motor'].map(c=>`<button class="tab" data-c="${c}" aria-pressed="${c===cat}">${c==='all'?'Усі запчастини':CAT[c]}<small>${n(c)}</small></button>`).join('');
   const bs=[...new Set(items.filter(i=>cat==='all'||i.cat===cat).map(i=>i.brand))].sort();
   if(!bs.includes(brand))brand='';
   $('brand').innerHTML='<option value="">Усі виробники</option>'+bs.map(b=>`<option${b===brand?' selected':''}>${esc(b)}</option>`).join('');
 }
 function what(it){
-  if(it.cat==='motor')return `Двигун пральної машини ${esc(it.brand)} · ${esc(it.model)}`;
+  if(it.cat==='motor')return `Двигун для пральної машини ${esc(it.brand)} · ${esc(it.model)}`;
   const k=it.kind||((it.model&&!/^(ревізія|платформа)/.test(it.model))?it.model:'плата керування');
-  return `${CAT[it.cat]} ${esc(it.brand)} · ${esc(k)}`;
+  return `${FOR[it.cat]} ${esc(it.brand)} · ${esc(k)}`;
 }
 function render(){
   const nq=norm(q);
@@ -247,9 +248,9 @@ $('heroSearch').addEventListener('submit',e=>{e.preventDefault();q=$('q1').value
 $('more').addEventListener('click',()=>{shown+=24;render()});
 $('list').addEventListener('click',e=>{const p=e.target.closest('.ph');if(p){$('lbImg').src=p.dataset.ph;$('lbImg').alt='Плата '+p.dataset.code;$('lbCap').textContent=p.dataset.code;$('lb').showModal();return}const b=e.target.closest('.add');if(!b)return;const id=+b.dataset.id;req.has(id)?req.delete(id):req.add(id);save();render()});
 function reqText(){
-  const lines=[...req].map(i=>items[i]).map(it=>`• ${it.code} — ${CAT[it.cat].toLowerCase()} ${it.brand}${it.kind?', '+it.kind:''}`);
+  const lines=[...req].map(i=>items[i]).map(it=>`• ${it.code} — ${FOR[it.cat].toLowerCase()} ${it.brand}${it.kind?', '+it.kind:''}`);
   const n=$('note').value.trim();
-  return `Добрий день! Цікавлять плати:\n${lines.join('\n')}${n?`\nМоя машина: ${n}`:''}\nЧому вийшла з ладу попередня: ${$('why').value.trim()}\nПідкажіть ціну та наявність.`;
+  return `Добрий день! Цікавлять запчастини:\n${lines.join('\n')}${n?`\nМоя машина: ${n}`:''}\nЧому вийшла з ладу попередня: ${$('why').value.trim()}\nПідкажіть ціну та наявність.`;
 }
 function dlgList(){
   $('reqList').innerHTML=[...req].map(i=>items[i]).map(it=>`<li><span><b class="mono">${esc(it.code)}</b><br><small>${what(it)}</small></span><button data-id="${it.id}">Прибрати</button></li>`).join('')||'<li>Запит порожній</li>';
