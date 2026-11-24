@@ -144,6 +144,21 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 <input class="tb-search" id="q2" type="search" placeholder="Код, модель машини або тип плати" aria-label="Пошук у каталозі" autocomplete="off">
 <select id="brand" aria-label="Виробник"></select>
 </div>
+<div id="motorHelp" hidden style="margin:0 0 18px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--card)">
+<h3 style="font-size:20px;margin-bottom:6px">Як читати розміри двигуна</h3>
+<p class="meta" style="margin:0 0 8px">Напр. «23/6,5 8 контактів»: шків упертий у стінку, 6,5 см — до ближнього вуха кріплення, 23 см — до дальнього. «Контакти» — кількість контактів (пінів) у роз'ємі двигуна.</p>
+<svg viewBox="0 0 680 230" style="width:100%;height:auto;display:block" role="img" aria-label="Схема вимірювання двигуна"><defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5"/></marker></defs>
+<rect x="60" y="20" width="14" height="170" fill="#888780"/><text x="67" y="212" text-anchor="middle" font-size="13" fill="currentColor">Стінка</text>
+<rect x="74" y="98" width="50" height="24" rx="4" fill="#5F5E5A"/><text x="99" y="90" text-anchor="middle" font-size="13" fill="currentColor">Шків</text>
+<rect x="124" y="70" width="440" height="80" rx="8" fill="#D3D1C7" stroke="#5F5E5A" stroke-width=".5"/><text x="344" y="115" text-anchor="middle" font-size="15" fill="#2C2C2A">Двигун</text>
+<rect x="160" y="46" width="28" height="28" rx="4" fill="#F5C4B3" stroke="#993C1D" stroke-width=".5"/><rect x="510" y="46" width="28" height="28" rx="4" fill="#F5C4B3" stroke="#993C1D" stroke-width=".5"/>
+<text x="174" y="38" text-anchor="middle" font-size="13" fill="currentColor">Вухо 1</text><text x="524" y="38" text-anchor="middle" font-size="13" fill="currentColor">Вухо 2</text>
+<rect x="566" y="92" width="34" height="36" rx="3" fill="#fff" stroke="#5F5E5A" stroke-width=".8"/><g fill="#5F5E5A"><rect x="572" y="98" width="4" height="4"/><rect x="580" y="98" width="4" height="4"/><rect x="588" y="98" width="4" height="4"/><rect x="572" y="108" width="4" height="4"/><rect x="580" y="108" width="4" height="4"/><rect x="588" y="108" width="4" height="4"/><rect x="572" y="118" width="4" height="4"/><rect x="580" y="118" width="4" height="4"/></g>
+<text x="612" y="104" font-size="13" fill="currentColor">Роз'єм</text><text x="612" y="120" font-size="13" fill="currentColor">(контакти)</text>
+<line x1="174" y1="150" x2="174" y2="172" stroke="#D85A30" stroke-width=".7" stroke-dasharray="3 3"/><line x1="524" y1="150" x2="524" y2="200" stroke="#534AB7" stroke-width=".7" stroke-dasharray="3 3"/>
+<line x1="76" y1="172" x2="172" y2="172" stroke="#D85A30" stroke-width="1.5" marker-start="url(#ar)" marker-end="url(#ar)"/><text x="124" y="166" text-anchor="middle" font-size="14" font-weight="600" fill="#D85A30">6,5 см</text>
+<line x1="76" y1="200" x2="522" y2="200" stroke="#534AB7" stroke-width="1.5" marker-start="url(#ar)" marker-end="url(#ar)"/><text x="300" y="222" text-anchor="middle" font-size="14" font-weight="600" fill="#534AB7">23 см</text></svg>
+</div>
 <div class="count" id="count"></div>
 <div class="list" id="list"></div>
 <button class="btn ghost more" id="more" hidden>Показати ще</button>
@@ -231,10 +246,11 @@ function render(){
   const f=items.filter(i=>(cat==='all'||i.cat===cat)&&(!brand||i.brand===brand)&&(!nq||i.key.includes(nq)));
   $('count').textContent=f.length?`Знайдено: ${f.length}`:'';
   $('list').innerHTML=f.length?f.slice(0,shown).map(it=>{
-    const m=it.cat==='motor'?'Розміри в см (напр. 23/6,5): шків упертий у стінку; менше число — відстань до ближнього вуха кріплення, більше — до дальнього':[it.model&&it.kind?it.model:(/^(ревізія|платформа)/.test(it.model)?it.model:''),it.note].filter(Boolean).join(' · ');
+    const m=it.cat==='motor'?'Розміри в см: див. схему над списком двигунів':[it.model&&it.kind?it.model:(/^(ревізія|платформа)/.test(it.model)?it.model:''),it.note].filter(Boolean).join(' · ');
     return `<article class="item">${it.ph?`<button class="ph" data-ph="${esc(it.ph)}" data-code="${esc(it.code)}" aria-label="Фото плати ${esc(it.code)}"><img src="${esc(it.ph)}" alt="Плата ${esc(it.code)}" loading="lazy"></button>`:`<div class="nophoto"><div class="lbl"><b>${esc(it.code)}</b><span>${esc(it.brand)}${it.model&&!/^(ревізія|платформа)/.test(it.model)?'':(it.model?' · '+esc(it.model):'')}</span><span class="bars"></span></div><small>Фото надішлемо у Viber на запит</small></div>`}<div class="code" title="${esc(it.code)}">${esc(it.code)}</div><div class="what">${what(it)}</div>${m?`<div class="meta">${esc(m)}</div>`:''}${it.fits?`<div class="fits"><b>Стояла в:</b> ${esc(it.fits)}</div>`:''}${it.seen?`<div class="fits"><b>Зустрічається в моделях:</b> ${esc(it.seen)} <span class="meta">(за даними оголошень, сумісність уточнюйте)</span></div>`:''}${it.cat==='dish'?'<div class="meta">З прошивкою під вашу машину — від 1\u00a0800 грн</div>':''}${it.cat==='wash'&&it.brand==='Bosch / Siemens'&&it.kind==='силові модулі'?'<div class="meta">Перепрограмую під вашу машину (модулі 2015–2020 рр.), прошивка оплачується окремо</div>':''}<div class="foot"><span class="stock">${it.kit?`<span class="price">Комплект від 3\u00a0000 грн</span><br>${esc(it.kit)}${it.pr?'; окремо — від '+fmt(it.pr)+' грн':''}<br>`:`<span class="price">${it.pr?'від '+fmt(it.pr)+' грн':'Ціна за запитом'}</span><br>`}В наявності: ${it.qty} шт</span><button class="add${req.has(it.id)?' on':''}" data-id="${it.id}">${req.has(it.id)?'У запиті ✓':'До запиту'}</button></div></article>`}).join('')
     :`<div class="empty">За запитом «${esc(q)}» нічого не знайшлося. Напишіть нам код — можливо, плата є, але ще не внесена в каталог.</div>`;
   $('more').hidden=f.length<=shown;
+  $('motorHelp').hidden=cat!=='motor';
   bar();
 }
 function bar(){
