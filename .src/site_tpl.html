@@ -3,7 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Модуль — плати для техніки</title>
+<title>Б/в плати й модулі для пральних, сушильних машин і посудомийок — Модуль, Ківерці</title>
+<meta name="description" content="Б/в плати управління, силові та інверторні модулі для пральних, сушильних і посудомийних машин Bosch, Siemens, Neff, AEG, Electrolux, LG, Samsung, Beko, а також двигуни. Пошук за кодом з наклейки, прошивка під вашу машину, Нова Пошта по Україні.">
+<meta property="og:title" content="Модуль — б/в плати й двигуни для побутової техніки">
+<meta property="og:description" content="Плати управління й модулі для пральних, сушильних і посудомийних машин. Пошук за кодом з наклейки.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="uk_UA">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -102,12 +107,14 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 .pl.p{background:var(--cu);color:#1a0f05}.pl.m{background:var(--chip);color:var(--ink);border:1px solid var(--line)}.pl.n{color:var(--mute)}
 .cg .go{margin:10px 16px 16px}
 @media(max-width:640px){.cg td:nth-child(3),.cg th:nth-child(3){display:none}}
+.zf{display:grid;gap:12px;max-width:640px;margin-top:18px}.zf label{font-size:14px;color:var(--mute);display:grid;gap:6px}.zf label b{color:var(--ink)}
+.zf input,.zf textarea{font:16px Inter,sans-serif;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-height:44px}.zf textarea{min-height:80px}
 </style>
 </head>
 <body>
 <header><div class="wrap">
 <a class="logo" href="#top"><i></i>Модуль</a>
-<nav><a href="#catalog">Каталог</a><a href="#codes">Коди помилок</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
+<nav><a href="#catalog">Каталог</a><a href="#codes">Коди помилок</a><a href="#zapyt">Запит запчастини</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
 </div></header>
 
 <div class="notice" role="note"><div class="wrap">Сайт щойно почав роботу. Облік усіх запчастин завершимо протягом місяця, тож частини позицій тут може ще не бути. Якщо потрібної плати не знайшли — напишіть нам, і вибачте за незручності.</div></div>
@@ -170,6 +177,7 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 <div class="count" id="count"></div>
 <div class="list" id="list"></div>
 <button class="btn ghost more" id="more" hidden>Показати ще</button>
+<details class="cg" id="allcodes"><summary>Усі коди в наявності (список)</summary><div style="padding:0 16px 16px">__ALLCODES__</div></details>
 </div></section>
 
 <section class="band" id="codes"><div class="wrap">
@@ -179,6 +187,18 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 <div class="toolbar"><input class="tb-search" id="cq" type="search" placeholder="Введіть код, наприклад F21 або E51" aria-label="Пошук коду помилки" autocomplete="off"></div>
 <div id="cgs"></div>
 <p class="meta" style="margin-top:14px">Значення кодів можуть відрізнятися залежно від серії машини. Якщо сумніваєтесь — напишіть модель і код у Viber.</p>
+</div></section>
+
+<section class="band" id="zapyt" style="background:var(--chip)"><div class="wrap">
+<h2 style="font-size:36px">Запит запчастини</h2>
+<p style="max-width:44em;font-size:17px">Не знайшли свою плату чи двигун у каталозі? Залиште запит: частина запчастин ще не внесена на сайт, а щось можу знайти під замовлення.</p>
+<div class="zf">
+<label>Код з наклейки або назва запчастини<input id="zCode" placeholder="Напр. 9000 968 120 або двигун Indesit"></label>
+<label>Марка й модель машини<input id="zModel" placeholder="Напр. Bosch WAS28440"></label>
+<label><b>Що сталося з машиною перед поломкою? (обов'язково)</b><textarea id="zWhy" placeholder="Напр. вимкнулась під час віджиму, після грози, залило водою, вибило автомат…"></textarea></label>
+<div class="row" style="margin-top:0"><a class="btn" style="background:#229ed9;text-decoration:none" id="zTg" href="https://t.me/modul_plata_bot">Надіслати через Telegram-бот</a><button class="btn" style="background:#7360f2" id="zViber">Скопіювати й відкрити Viber</button></div>
+<p class="hint" id="zMsg">Telegram-бот сам перепитає деталі. Для Viber текст скопіюється — вставте його в чат.</p>
+</div>
 </div></section>
 
 <section class="band" id="order" style="background:var(--chip)"><div class="wrap">
@@ -272,7 +292,7 @@ function render(){
   $('list').innerHTML=f.length?f.slice(0,shown).map(it=>{
     const m=it.cat==='motor'?[it.note?'Маркування: '+it.note:'','Б/в. Розміри в см — див. схему вище'].filter(Boolean).join(' · '):[it.model&&it.kind?it.model:(/^(ревізія|платформа)/.test(it.model)?it.model:''),it.note].filter(Boolean).join(' · ');
     return `<article class="item">${it.ph?`<button class="ph" data-ph="${esc(it.ph)}" data-code="${esc(it.code)}" aria-label="Фото плати ${esc(it.code)}"><img src="${esc(it.ph)}" alt="Плата ${esc(it.code)}" loading="lazy"></button>`:`<div class="nophoto"><div class="lbl"><b>${esc(it.code)}</b><span>${esc(it.brand)}${it.model&&!/^(ревізія|платформа)/.test(it.model)?'':(it.model?' · '+esc(it.model):'')}</span><span class="bars"></span></div><small>Фото надішлемо у Viber на запит</small></div>`}<div class="code" title="${esc(it.code)}">${esc(it.code)}</div><div class="what">${what(it)}</div>${m?`<div class="meta">${esc(m)}</div>`:''}${it.fits?`<div class="fits"><b>Стояла в:</b> ${esc(it.fits)}</div>`:''}${it.seen?`<div class="fits"><b>Зустрічається в моделях:</b> ${esc(it.seen)} <span class="meta">(за даними оголошень, сумісність уточнюйте)</span></div>`:''}${it.cat==='dish'?'<div class="meta">З прошивкою під вашу машину — від 1\u00a0800 грн</div>':''}${it.cat==='wash'&&it.brand==='Bosch / Siemens'&&it.kind==='силові модулі'?'<div class="meta">Перепрограмую під вашу машину (модулі 2015–2020 рр.), прошивка оплачується окремо</div>':''}<div class="foot"><span class="stock">${it.kit?`<span class="price">Комплект від 3\u00a0000 грн</span><br>${esc(it.kit)}${it.pr?'; окремо — від '+fmt(it.pr)+' грн':''}<br>`:`<span class="price">${it.pr?'від '+fmt(it.pr)+' грн':'Ціна за запитом'}</span><br>`}В наявності: ${it.qty} шт</span><button class="add${req.has(it.id)?' on':''}" data-id="${it.id}">${req.has(it.id)?'У запиті ✓':'До запиту'}</button></div></article>`}).join('')
-    :`<div class="empty">За запитом «${esc(q)}» нічого не знайшлося. Напишіть нам код — можливо, плата є, але ще не внесена в каталог.</div>`;
+    :`<div class="empty">За запитом «${esc(q)}» нічого не знайшлося. Можливо, плата є, але ще не внесена в каталог. <a href="#zapyt" data-zq="${esc(q)}">Залиште запит</a>.</div>`;
   $('more').hidden=f.length<=shown;
   $('motorHelp').hidden=cat!=='motor';
   bar();
@@ -309,6 +329,13 @@ function codes(){const nq=norm($('cq').value);let any=0;
 $('cq').addEventListener('input',codes);
 $('cgs').addEventListener('click',e=>{const b=e.target.closest('.go');if(!b)return;const g=CG[+b.dataset.g];cat=g.cat;brand=g.brand;q='';$('q1').value='';$('q2').value='';shown=24;tabs();render();$('catalog').scrollIntoView()});
 codes();
+function zText(){return ['Запит запчастини з сайту','Код / назва: '+$('zCode').value.trim(),'Машина: '+($('zModel').value.trim()||'—'),'Що сталося: '+$('zWhy').value.trim()].join('\n')}
+$('zCode').addEventListener('input',()=>{const c=$('zCode').value.replace(/\s+/g,'_').replace(/[^A-Za-z0-9_-]/g,'').slice(0,60);$('zTg').href='https://t.me/modul_plata_bot'+(c?'?start='+c:'')});
+$('zViber').addEventListener('click',async()=>{if(!$('zCode').value.trim()){$('zMsg').textContent='Вкажіть код або назву запчастини.';$('zCode').focus();return}if($('zWhy').value.trim().length<10){$('zMsg').textContent='Опишіть, що сталося з машиною перед поломкою: без цього запит не розглядається.';$('zWhy').focus();return}
+ try{await navigator.clipboard.writeText(zText());$('zMsg').textContent='Скопійовано. Вставте текст у чат Viber.'}catch(e){$('zMsg').textContent='Скопіюйте вручну: '+zText()}
+ location.href='viber://chat?number=%2B380663775346'});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-zq]');if(!a)return;$('zCode').value=a.dataset.zq;$('zCode').dispatchEvent(new Event('input'))});
+
 
 }
 </script>
