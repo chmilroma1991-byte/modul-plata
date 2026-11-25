@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /.src/
 
-Sitemap: https://modul-plata.chmilroma1991.workers.dev/sitemap.xml
+Sitemap: https://modul-plata.com.ua/sitemap.xml
