@@ -39,7 +39,7 @@ header .wrap{display:flex;align-items:center;gap:20px;padding:12px max(5vw,16px)
 .logo{display:flex;align-items:center;gap:10px;font:800 20px Archivo,sans-serif;text-decoration:none}
 .logo i{width:26px;height:26px;border:2px solid var(--cu);border-radius:5px;display:grid;place-items:center}
 .logo i::after{content:"";width:8px;height:8px;background:var(--cu);border-radius:50%}
-nav{display:flex;gap:18px;margin-inline-start:auto;flex-wrap:wrap;font-size:15px}
+nav{order:2;display:flex;gap:18px;margin-inline-start:auto;flex-wrap:wrap;font-size:15px}
 nav a{text-decoration:none;opacity:.85;padding:6px 0}nav a:hover{opacity:1;color:var(--cu)}
 .hero{background:var(--pcb);color:var(--silk)}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,56px);align-items:center}
@@ -95,13 +95,13 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 .dlg{padding:22px}.dlg h2{font-size:24px;margin-bottom:10px}
 .dlg ul{list-style:none;padding:0;margin:0 0 14px;max-height:40vh;overflow:auto}
 .dlg li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
-.dlg li button{border:0;background:none;color:var(--mute);font-size:14px;cursor:pointer;min-height:44px}
+.dlg li span{min-width:0;flex:1}.dlg li button{flex:none;align-self:center;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px Inter,sans-serif;padding:6px 12px;border-radius:8px;cursor:pointer;min-height:44px}
 .dlg textarea{width:100%;font:16px Inter,sans-serif;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-height:70px}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .btn{border:0;background:var(--pcb);color:var(--silk);font:600 16px Inter,sans-serif;padding:12px 18px;border-radius:9px;min-height:44px;cursor:pointer}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .hint{font-size:14px;color:var(--mute);margin-top:10px}
-.mbtn{display:none;margin-left:auto;border:1px solid var(--cu);background:transparent;color:var(--silk);font:600 16px Inter,sans-serif;padding:8px 14px;border-radius:8px;min-height:44px;cursor:pointer}
+.mbtn{order:4;display:none;margin-left:auto;border:1px solid var(--cu);background:transparent;color:var(--silk);font:600 16px Inter,sans-serif;padding:8px 14px;border-radius:8px;min-height:44px;cursor:pointer}
 @media(max-width:760px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.fig{display:none}.hero .txt{order:1}
 .mbtn{display:block}nav{display:none;width:100%;flex-direction:column;gap:0;padding:4px 0 8px}header.open nav{display:flex}nav a{padding:12px 4px;border-top:1px solid rgba(255,255,255,.12);font-size:17px}
 #tabs{gap:8px}#tabs .tab{padding:8px 12px}
@@ -118,12 +118,19 @@ h2{font-size:30px!important}}
 @media(max-width:640px){.cg td:nth-child(3),.cg th:nth-child(3){display:none}}
 .zf{display:grid;gap:12px;max-width:640px;margin-top:18px}.zf label{font-size:14px;color:var(--mute);display:grid;gap:6px}.zf label b{color:var(--ink)}
 .zf input,.zf textarea{font:16px Inter,sans-serif;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-height:44px}.zf textarea{min-height:80px}
+[hidden]{display:none!important}
+.cartbtn{order:3;border:1px solid var(--cu);background:var(--cu);color:#1a0f05;font:700 15px Inter,sans-serif;padding:8px 14px;border-radius:8px;min-height:44px;cursor:pointer;white-space:nowrap}
+.cartbtn b{display:inline-block;min-width:22px;padding:0 6px;margin-left:6px;border-radius:999px;background:#1a0f05;color:var(--silk);font-size:13px;line-height:22px}
+.cartbtn.empty{background:transparent;color:var(--silk)}
+.noresult{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;font-size:17px}.noresult p{margin:0 0 12px}
+@media(max-width:760px){header .wrap{gap:8px}.cartbtn{order:2;margin-left:auto}.mbtn{order:3}nav{order:5}}
+@media(max-width:400px){.mt{display:none}.logo{font-size:18px}}
 </style>
 </head>
 <body>
 <header><div class="wrap">
 <a class="logo" href="#top"><i></i>Модуль</a>
-<button class="mbtn" id="mbtn" aria-expanded="false" aria-controls="mnav">☰ Меню</button><nav id="mnav"><a href="#catalog">Каталог</a><a href="#codes">Коди помилок</a><a href="#zapyt">Запит запчастини</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
+<button class="cartbtn empty" id="cartBtn" aria-label="Мій запит">Запит<b id="cartN">0</b></button><button class="mbtn" id="mbtn" aria-expanded="false" aria-controls="mnav" aria-label="Меню">☰<span class="mt"> Меню</span></button><nav id="mnav"><a href="#catalog">Каталог</a><a href="#codes">Коди помилок</a><a href="#zapyt">Запит запчастини</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
 </div></header>
 
 <div class="notice" role="note"><div class="wrap">Сайт щойно почав роботу. Облік усіх запчастин завершимо протягом місяця, тож частини позицій тут може ще не бути. Якщо потрібної плати не знайшли — напишіть нам, і вибачте за незручності.</div></div>
@@ -259,7 +266,7 @@ h2{font-size:30px!important}}
 <textarea id="note" placeholder="Напр. Bosch WAS28440"></textarea>
 <label for="why" class="hint" style="display:block;margin:12px 0 6px;color:var(--ink)"><b>Чому вийшла з ладу попередня плата? (обов'язково)</b></label>
 <textarea id="why" placeholder="Напр. машина вимкнулась під час віджиму, після грози, залило водою, вибило автомат…"></textarea>
-<div class="row"><button class="btn" id="copy">Скопіювати текст</button><a class="btn" style="background:#7360f2;text-decoration:none" href="viber://chat?number=%2B380663775346">Viber</a><a class="btn" style="background:#229ed9;text-decoration:none" href="https://t.me/modul_plata_bot" id="tgReq">Telegram-бот</a><button class="btn ghost" id="close">Закрити</button></div>
+<div class="row"><button class="btn" id="copy">Скопіювати текст</button><button class="btn ghost" id="clearReq">Очистити запит</button><a class="btn" style="background:#7360f2;text-decoration:none" href="viber://chat?number=%2B380663775346">Viber</a><a class="btn" style="background:#229ed9;text-decoration:none" href="https://t.me/modul_plata_bot" id="tgReq">Telegram-бот</a><button class="btn ghost" id="close">Закрити</button></div>
 <p class="hint" id="copied">Скопіюйте текст і надішліть у Viber або Telegram на номер 066 377 53 46.</p>
 </div></dialog>
 
@@ -299,23 +306,23 @@ function what(it){
 function render(){
   const nq=norm(q);
   const f=items.filter(i=>(cat==='all'||i.cat===cat)&&(!brand||i.brand===brand)&&(!nq||i.key.includes(nq)));
-  $('count').textContent=f.length?`Знайдено: ${f.length}`:'';
+  $('count').textContent=f.length?`Знайдено: ${f.length}`:'Нічого не знайдено';
   $('list').innerHTML=f.length?f.slice(0,shown).map(it=>{
     const m=it.cat==='motor'?[it.note?'Маркування: '+it.note:'','Б/в. Розміри в см — див. схему вище'].filter(Boolean).join(' · '):[it.model&&it.kind?it.model:(/^(ревізія|платформа)/.test(it.model)?it.model:''),it.note].filter(Boolean).join(' · ');
-    return `<article class="item">${it.ph?`<button class="ph" data-ph="${esc(it.ph)}" data-code="${esc(it.code)}" aria-label="Фото плати ${esc(it.code)}"><img src="${esc(it.ph)}" alt="Плата ${esc(it.code)}" loading="lazy"></button>`:`<div class="nophoto"><div class="lbl"><b>${esc(it.code)}</b><span>${esc(it.brand)}${it.model&&!/^(ревізія|платформа)/.test(it.model)?'':(it.model?' · '+esc(it.model):'')}</span><span class="bars"></span></div><small>Фото надішлемо у Viber на запит</small></div>`}<div class="code" title="${esc(it.code)}">${esc(it.code)}</div><div class="what">${what(it)}</div>${m?`<div class="meta">${esc(m)}</div>`:''}${it.fits?`<div class="fits"><b>Стояла в:</b> ${esc(it.fits)}</div>`:''}${it.seen?`<div class="fits"><b>Зустрічається в моделях:</b> ${esc(it.seen)} <span class="meta">(за даними оголошень, сумісність уточнюйте)</span></div>`:''}${it.cat==='dish'?'<div class="meta">З прошивкою під вашу машину — від 1\u00a0800 грн</div>':''}${it.cat==='wash'&&it.brand==='Bosch / Siemens'&&it.kind==='силові модулі'?'<div class="meta">Перепрограмую під вашу машину (модулі 2015–2020 рр.), прошивка оплачується окремо</div>':''}<div class="foot"><span class="stock">${it.kit?`<span class="price">Комплект від 3\u00a0000 грн</span><br>${esc(it.kit)}${it.pr?'; окремо — від '+fmt(it.pr)+' грн':''}<br>`:`<span class="price">${it.pr?'від '+fmt(it.pr)+' грн':'Ціна за запитом'}</span><br>`}В наявності: ${it.qty} шт</span><button class="add${req.has(it.id)?' on':''}" data-id="${it.id}">${req.has(it.id)?'У запиті ✓':'До запиту'}</button></div></article>`}).join('')
-    :`<div class="empty">За запитом «${esc(q)}» нічого не знайшлося. Можливо, плата є, але ще не внесена в каталог. <a href="#zapyt" data-zq="${esc(q)}">Залиште запит</a>.</div>`;
+    return `<article class="item">${it.ph?`<button class="ph" data-ph="${esc(it.ph)}" data-code="${esc(it.code)}" aria-label="Фото плати ${esc(it.code)}"><img src="${esc(it.ph)}" alt="Плата ${esc(it.code)}" loading="lazy"></button>`:`<div class="nophoto"><div class="lbl"><b>${esc(it.code)}</b><span>${esc(it.brand)}${it.model&&!/^(ревізія|платформа)/.test(it.model)?'':(it.model?' · '+esc(it.model):'')}</span><span class="bars"></span></div><small>Фото надішлемо у Viber на запит</small></div>`}<div class="code" title="${esc(it.code)}">${esc(it.code)}</div><div class="what">${what(it)}</div>${m?`<div class="meta">${esc(m)}</div>`:''}${it.fits?`<div class="fits"><b>Стояла в:</b> ${esc(it.fits)}</div>`:''}${it.seen?`<div class="fits"><b>Зустрічається в моделях:</b> ${esc(it.seen)} <span class="meta">(за даними оголошень, сумісність уточнюйте)</span></div>`:''}${it.cat==='dish'?'<div class="meta">З прошивкою під вашу машину — від 1\u00a0800 грн</div>':''}${it.cat==='wash'&&it.brand==='Bosch / Siemens'&&it.kind==='силові модулі'?'<div class="meta">Перепрограмую під вашу машину (модулі 2015–2020 рр.), прошивка оплачується окремо</div>':''}<div class="foot"><span class="stock">${it.kit?`<span class="price">Комплект від 3\u00a0000 грн</span><br>${esc(it.kit)}${it.pr?'; окремо — від '+fmt(it.pr)+' грн':''}<br>`:`<span class="price">${it.pr?'від '+fmt(it.pr)+' грн':'Ціна за запитом'}</span><br>`}В наявності: ${it.qty} шт</span><button class="add${req.has(it.id)?' on':''}" data-id="${it.id}">${req.has(it.id)?'Прибрати ✕':'До запиту'}</button></div></article>`}).join('')
+    :`<div class="noresult"><p><b>«${esc(q)}» у каталозі поки немає.</b></p><p>Можливо, плата є, але ще не внесена на сайт. Залиште запит — перевіримо склад.</p><a class="btn" style="text-decoration:none;display:inline-block" href="#zapyt" data-zq="${esc(q)}">Залишити запит на цей код</a></div>`;
   $('more').hidden=f.length<=shown;
   $('motorHelp').hidden=cat!=='motor';
   bar();
 }
 function bar(){
-  $('bar').classList.toggle('show',req.size>0);
+  $('cartN').textContent=req.size;$('cartBtn').classList.toggle('empty',!req.size);
   $('barTxt').textContent=`У запиті: ${req.size}`;
 }
 $('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;cat=b.dataset.c;shown=24;tabs();render()});
 $('brand').addEventListener('change',e=>{brand=e.target.value;shown=24;render()});
 $('q2').addEventListener('input',e=>{q=e.target.value;$('q1').value=q;shown=24;render()});
-$('heroSearch').addEventListener('submit',e=>{e.preventDefault();q=$('q1').value;$('q2').value=q;cat='all';brand='';shown=24;tabs();render();$('catalog').scrollIntoView()});
+$('heroSearch').addEventListener('submit',e=>{e.preventDefault();q=$('q1').value;$('q2').value=q;cat='all';brand='';shown=24;tabs();render();$('q1').blur();setTimeout(()=>window.scrollTo({top:$('catalog').getBoundingClientRect().top+scrollY-64,behavior:'smooth'}),60)});
 $('more').addEventListener('click',()=>{shown+=24;render()});
 $('list').addEventListener('click',e=>{const p=e.target.closest('.ph');if(p){$('lbImg').src=p.dataset.ph;$('lbImg').alt='Плата '+p.dataset.code;$('lbCap').textContent=p.dataset.code;$('lb').showModal();return}const b=e.target.closest('.add');if(!b)return;const id=+b.dataset.id;req.has(id)?req.delete(id):req.add(id);save();render()});
 function reqText(){
@@ -324,9 +331,10 @@ function reqText(){
   return `Добрий день! Цікавлять запчастини:\n${lines.join('\n')}${n?`\nМоя машина: ${n}`:''}\nЧому вийшла з ладу попередня: ${$('why').value.trim()}\nПідкажіть ціну та наявність.`;
 }
 function dlgList(){
-  $('reqList').innerHTML=[...req].map(i=>items[i]).map(it=>`<li><span><b class="mono">${esc(it.code)}</b><br><small>${what(it)}</small></span><button data-id="${it.id}">Прибрати</button></li>`).join('')||'<li>Запит порожній</li>';
+  $('reqList').innerHTML=[...req].map(i=>items[i]).map(it=>`<li><span><b class="mono">${esc(it.code)}</b><br><small>${what(it)}</small></span><button data-id="${it.id}">✕ Прибрати</button></li>`).join('')||'<li>Запит порожній. Натисніть «До запиту» біля потрібної плати в каталозі.</li>';
 }
-$('openReq').addEventListener('click',()=>{dlgList();{const f=[...req].map(i=>items[i])[0];$('tgReq').href='https://t.me/modul_plata_bot'+(f?'?start='+f.code.replace(/\s+/g,'_').replace(/[^A-Za-z0-9_-]/g,'').slice(0,60):'')}$('copied').textContent='Скопіюйте текст і надішліть у Viber або Telegram на номер 066 377 53 46.';$('dlg').showModal()});
+const openReq=()=>{dlgList();{const f=[...req].map(i=>items[i])[0];$('tgReq').href='https://t.me/modul_plata_bot'+(f?'?start='+f.code.replace(/\s+/g,'_').replace(/[^A-Za-z0-9_-]/g,'').slice(0,60):'')}$('copied').textContent='Скопіюйте текст і надішліть у Viber або Telegram на номер 066 377 53 46.';$('dlg').showModal()};
+$('openReq').addEventListener('click',openReq);$('cartBtn').addEventListener('click',openReq);
 $('reqList').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;req.delete(+b.dataset.id);save();dlgList();render()});
 $('close').addEventListener('click',()=>$('dlg').close());
 $('copy').addEventListener('click',async()=>{if(!$('why').value.trim()){$('copied').textContent='Напишіть, чому вийшла з ладу попередня плата — без цього запит не розглядається.';$('why').focus();return}try{await navigator.clipboard.writeText(reqText());$('copied').textContent='Скопійовано. Вставте в месенджер і надішліть.'}catch(e){$('note').value=reqText();$('copied').textContent='Не вдалося скопіювати автоматично — текст у полі вище, виділіть і скопіюйте.'}});
@@ -340,6 +348,8 @@ function codes(){const nq=norm($('cq').value);let any=0;
 $('cq').addEventListener('input',codes);
 $('cgs').addEventListener('click',e=>{const b=e.target.closest('.go');if(!b)return;const g=CG[+b.dataset.g];cat=g.cat;brand=g.brand;q='';$('q1').value='';$('q2').value='';shown=24;tabs();render();$('catalog').scrollIntoView()});
 codes();
+$('clearReq').addEventListener('click',()=>{req.clear();save();dlgList();render()});
+
 $('mbtn').addEventListener('click',()=>{const h=document.querySelector('header');const o=h.classList.toggle('open');$('mbtn').setAttribute('aria-expanded',o)});
 $('mnav').addEventListener('click',e=>{if(e.target.closest('a')){document.querySelector('header').classList.remove('open');$('mbtn').setAttribute('aria-expanded','false')}});
 
