@@ -101,7 +101,13 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 .btn{border:0;background:var(--pcb);color:var(--silk);font:600 16px Inter,sans-serif;padding:12px 18px;border-radius:9px;min-height:44px;cursor:pointer}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .hint{font-size:14px;color:var(--mute);margin-top:10px}
-@media(max-width:760px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.fig{min-height:220px;order:2}.hero .txt{order:1}nav{display:none}}
+.mbtn{display:none;margin-left:auto;border:1px solid var(--cu);background:transparent;color:var(--silk);font:600 16px Inter,sans-serif;padding:8px 14px;border-radius:8px;min-height:44px;cursor:pointer}
+@media(max-width:760px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.fig{display:none}.hero .txt{order:1}
+.mbtn{display:block}nav{display:none;width:100%;flex-direction:column;gap:0;padding:4px 0 8px}header.open nav{display:flex}nav a{padding:12px 4px;border-top:1px solid rgba(255,255,255,.12);font-size:17px}
+#tabs{gap:8px}#tabs .tab{padding:8px 12px}
+.toolbar select,.toolbar .tb-search{width:100%}
+.cg td,.cg th{padding:8px 10px}.cg td:nth-child(2){overflow-wrap:anywhere}.cg summary{font-size:17px}
+h2{font-size:30px!important}}
 .cg{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:12px}
 .cg summary{cursor:pointer;padding:14px 16px;font:700 18px Archivo,Inter,sans-serif;min-height:44px;list-style-position:inside}
 .cg table{width:100%;border-collapse:collapse;font-size:15px}.cg td,.cg th{padding:8px 16px;border-top:1px solid var(--line);text-align:start;vertical-align:top}
@@ -117,7 +123,7 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 <body>
 <header><div class="wrap">
 <a class="logo" href="#top"><i></i>Модуль</a>
-<nav><a href="#catalog">Каталог</a><a href="#codes">Коди помилок</a><a href="#zapyt">Запит запчастини</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
+<button class="mbtn" id="mbtn" aria-expanded="false" aria-controls="mnav">☰ Меню</button><nav id="mnav"><a href="#catalog">Каталог</a><a href="#codes">Коди помилок</a><a href="#zapyt">Запит запчастини</a><a href="#order">Як замовити</a><a href="#about">Гарантія й оплата</a><a href="#contacts">Контакти</a></nav>
 </div></header>
 
 <div class="notice" role="note"><div class="wrap">Сайт щойно почав роботу. Облік усіх запчастин завершимо протягом місяця, тож частини позицій тут може ще не бути. Якщо потрібної плати не знайшли — напишіть нам, і вибачте за незручності.</div></div>
@@ -262,7 +268,7 @@ dialog::backdrop{background:rgba(5,15,10,.55)}
 {
 const PHONE='066 377 53 46';
 const D=__DATA__;
-const CAT={wash:'Модулі для пральних машин',dry:'Модулі для сушильних машин',dish:'Модулі для посудомийних машин',motor:'Двигуни для пральних машин'};
+const SH={wash:'Пральні',dry:'Сушильні',dish:'Посудомийні',motor:'Двигуни'};const CAT={wash:'Модулі для пральних машин',dry:'Модулі для сушильних машин',dish:'Модулі для посудомийних машин',motor:'Двигуни для пральних машин'};
 const FOR={wash:'Модуль для пральної машини',dry:'Модуль для сушильної машини',dish:'Модуль для посудомийної машини',motor:'Двигун для пральної машини'};
 const items=D.map((r,i)=>({id:i,cat:r[0],brand:r[1],kind:r[2],code:r[3],model:r[4],qty:r[5],note:r[6],fits:r[7],ph:r[8]||'',pr:r[9]||0,kit:r[10]||'',seen:r[11]||''}));
 const fmt=n=>n.toLocaleString('uk-UA').replace(/\s/g,'\u00a0');
@@ -280,7 +286,7 @@ $('phone').textContent=PHONE||'Номер з’явиться найближчи
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function tabs(){
   const n=c=>items.filter(i=>c==='all'||i.cat===c).length;
-  $('tabs').innerHTML=['all','wash','dry','dish','motor'].map(c=>`<button class="tab" data-c="${c}" aria-pressed="${c===cat}">${c==='all'?'Усі запчастини':CAT[c]}<small>${n(c)}</small></button>`).join('');
+  $('tabs').innerHTML=['all','wash','dry','dish','motor'].map(c=>`<button class="tab" data-c="${c}" aria-pressed="${c===cat}">${c==='all'?'Усі':(matchMedia('(max-width:760px)').matches?SH[c]:CAT[c])}<small>${n(c)}</small></button>`).join('');
   const bs=[...new Set(items.filter(i=>cat==='all'||i.cat===cat).map(i=>i.brand))].sort();
   if(!bs.includes(brand))brand='';
   $('brand').innerHTML='<option value="">Усі виробники</option>'+bs.map(b=>`<option${b===brand?' selected':''}>${esc(b)}</option>`).join('');
@@ -334,6 +340,9 @@ function codes(){const nq=norm($('cq').value);let any=0;
 $('cq').addEventListener('input',codes);
 $('cgs').addEventListener('click',e=>{const b=e.target.closest('.go');if(!b)return;const g=CG[+b.dataset.g];cat=g.cat;brand=g.brand;q='';$('q1').value='';$('q2').value='';shown=24;tabs();render();$('catalog').scrollIntoView()});
 codes();
+$('mbtn').addEventListener('click',()=>{const h=document.querySelector('header');const o=h.classList.toggle('open');$('mbtn').setAttribute('aria-expanded',o)});
+$('mnav').addEventListener('click',e=>{if(e.target.closest('a')){document.querySelector('header').classList.remove('open');$('mbtn').setAttribute('aria-expanded','false')}});
+
 function zText(){return ['Запит запчастини з сайту','Код / назва: '+$('zCode').value.trim(),'Машина: '+($('zModel').value.trim()||'—'),'Що сталося: '+$('zWhy').value.trim()].join('\n')}
 $('zCode').addEventListener('input',()=>{const c=$('zCode').value.replace(/\s+/g,'_').replace(/[^A-Za-z0-9_-]/g,'').slice(0,60);$('zTg').href='https://t.me/modul_plata_bot'+(c?'?start='+c:'')});
 $('zViber').addEventListener('click',async()=>{if(!$('zCode').value.trim()){$('zMsg').textContent='Вкажіть код або назву запчастини.';$('zCode').focus();return}if($('zWhy').value.trim().length<10){$('zMsg').textContent='Опишіть, що сталося з машиною перед поломкою: без цього запит не розглядається.';$('zWhy').focus();return}
